@@ -4,7 +4,7 @@
   "editor": "wokwi",
   "parts": [
     {
-      "type": "board-adafruit-feather-esp32s3",
+      "type": "board-esp32-s3-devkitc-1",
       "id": "esp",
       "top": 0, "left": 0,
       "attrs": { "psram": "enabled" }
@@ -12,45 +12,43 @@
     {
       "type": "wokwi-st7789",
       "id": "tft",
-      "top": -180, "left": 200,
+      "top": -200, "left": 250,
       "attrs": { "width": "320", "height": "240" }
     },
     {
       "type": "wokwi-rotary-encoder",
       "id": "enc",
-      "top": 160, "left": 300,
+      "top": 200, "left": 350,
       "attrs": {}
     },
     {
       "type": "wokwi-microsd-card",
       "id": "sd",
-      "top": 160, "left": -100,
+      "top": 200, "left": -50,
       "attrs": {}
     }
   ],
   "connections": [
-    ["esp:3V3",  "tft:VCC",  "red",   []],
-    ["esp:GND",  "tft:GND",  "black", []],
-    ["esp:SCK",  "tft:SCL",  "cyan",  []],
-    ["esp:MOSI", "tft:SDA",  "blue",  []],
-    ["esp:9",    "tft:CS",   "green", []],
-    ["esp:10",   "tft:DC",   "yellow",[]],
-    ["esp:5",    "tft:BLK",  "white", []],
+    ["esp:3V3",   "tft:VCC",  "red",    []],
+    ["esp:GND",   "tft:GND",  "black",  []],
+    ["esp:GPIO36","tft:SCL",  "cyan",   []],
+    ["esp:GPIO35","tft:SDA",  "blue",   []],
+    ["esp:GPIO9", "tft:CS",   "green",  []],
+    ["esp:GPIO10","tft:DC",   "yellow", []],
+    ["esp:GPIO5", "tft:BLK",  "white",  []],
 
-    ["esp:3V3",  "sd:VCC",   "red",   []],
-    ["esp:GND",  "sd:GND",   "black", []],
-    ["esp:SCK",  "sd:CLK",   "cyan",  []],
-    ["esp:MOSI", "sd:MOSI",  "blue",  []],
-    ["esp:MISO", "sd:MISO",  "purple",[]],
-    ["esp:8",    "sd:CS",    "green", []],
+    ["esp:3V3",   "sd:VCC",   "red",    []],
+    ["esp:GND",   "sd:GND",   "black",  []],
+    ["esp:GPIO36","sd:CLK",   "cyan",   []],
+    ["esp:GPIO35","sd:MOSI",  "blue",   []],
+    ["esp:GPIO37","sd:MISO",  "purple", []],
+    ["esp:GPIO8", "sd:CS",    "green",  []],
 
-    ["esp:3V3",  "enc:VCC",  "red",   []],
-    ["esp:GND",  "enc:GND",  "black", []],
-    ["esp:17",   "enc:CLK",  "cyan",  []],
-    ["esp:18",   "enc:DT",   "blue",  []],
-    ["esp:21",   "enc:SW",   "yellow",[]],
-
-    ["esp:GND",  "esp:GND",  "black", []]
+    ["esp:3V3",   "enc:VCC",  "red",    []],
+    ["esp:GND",   "enc:GND",  "black",  []],
+    ["esp:GPIO17","enc:CLK",  "cyan",   []],
+    ["esp:GPIO18","enc:DT",   "blue",   []],
+    ["esp:GPIO21","enc:SW",   "yellow", []]
   ],
   "dependencies": {}
 }
