@@ -1,11 +1,9 @@
 #include "encoder.h"
 #include "pins.h"
-#include <ESP32Encoder.h>
 #include <Arduino.h>
 
-static ESP32Encoder enc;
-static long         lastCount   = 0;
 static EncoderEvent pendingEvt  = ENC_NONE;
+static int          lastA       = HIGH;
 
 // Button state
 static bool     btnWasPressed   = false;
@@ -14,25 +12,20 @@ static bool     holdFired       = false;
 static const uint32_t HOLD_MS   = 600;
 
 void initEncoder() {
-    ESP32Encoder::useInternalWeakPullResistors = puType::up;
-    enc.attachHalfQuad(ENC_A, ENC_B);
-    enc.setCount(0);
-    lastCount = 0;
-
+    pinMode(ENC_A, INPUT_PULLUP);
+    pinMode(ENC_B, INPUT_PULLUP);
     pinMode(ENC_BTN, INPUT_PULLUP);
+    lastA = digitalRead(ENC_A);
 }
 
 void updateEncoder() {
-    // --- rotation ---
-    long count = enc.getCount();
-    long delta = count - lastCount;
-    if (delta >= 2) {
-        pendingEvt = ENC_CW;
-        lastCount  = count;
-    } else if (delta <= -2) {
-        pendingEvt = ENC_CCW;
-        lastCount  = count;
+    // --- rotation (simple quadrature read) ---
+    int a = digitalRead(ENC_A);
+    if (a != lastA && a == LOW) {
+        int b = digitalRead(ENC_B);
+        pendingEvt = (b == HIGH) ? ENC_CW : ENC_CCW;
     }
+    lastA = a;
 
     // --- button ---
     bool pressed = (digitalRead(ENC_BTN) == LOW);

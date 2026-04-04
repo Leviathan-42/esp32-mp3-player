@@ -1,7 +1,7 @@
 #include "display.h"
 #include "pins.h"
 #include <Adafruit_GFX.h>
-#include <Adafruit_ST7789.h>
+#include <Adafruit_ILI9341.h>
 #include <SPI.h>
 
 // Color palette
@@ -12,10 +12,11 @@
 #define C_GREEN   0x07E0
 #define C_HEADER  0x0319  // dark teal
 
-static Adafruit_ST7789 tft(TFT_CS, TFT_DC, TFT_RST);
+// Software SPI — works reliably in Wokwi simulation
+static Adafruit_ILI9341 tft(TFT_CS, TFT_DC, SPI_MOSI, SPI_SCK, TFT_RST, SPI_MISO);
 
 void initDisplay() {
-    tft.init(240, 320);
+    tft.begin();
     tft.setRotation(1);  // landscape: 320 wide x 240 tall
     tft.fillScreen(C_BG);
 

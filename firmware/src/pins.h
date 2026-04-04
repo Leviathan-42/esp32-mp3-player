@@ -1,16 +1,26 @@
 #pragma once
 
+// NOTE: These pins are set for Wokwi simulation (ESP32-S3 DevKitC-1).
+// GPIO 35/36/37 are tied to internal flash on the DevKitC-1 and can't be used.
+// When flashing to real Adafruit Feather ESP32-S3 hardware, change:
+//   SPI_SCK  -> 36
+//   SPI_MOSI -> 35
+//   SPI_MISO -> 37
+
+// --- SPI Bus ---
+#define SPI_SCK   7
+#define SPI_MOSI  6
+#define SPI_MISO  8
+
 // --- TFT Display (SPI) ---
-// Adafruit 2.0" ST7789 #4311
-// Shared SPI bus: SCK=36, MOSI=35, MISO=37 (hardware SPI on ESP32-S3 Feather)
+// Adafruit 2.0" ILI9341 #4311
 #define TFT_CS    9
 #define TFT_DC    10
-#define TFT_RST   -1   // tie RST pin to 3.3V on the board
-#define TFT_BL    5    // backlight (PWM capable)
+#define TFT_RST   -1   // tied to 3.3V
+#define TFT_BL    12
 
-// --- SD Card (SPI, shared bus with TFT) ---
-// Uses the SD slot built into TFT #4311
-#define SD_CS     8
+// --- SD Card (SPI, shared bus) ---
+#define SD_CS     11
 
 // --- I2S Audio (UDA1334A DAC) ---
 #define I2S_BCLK  14
