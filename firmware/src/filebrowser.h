@@ -7,5 +7,5 @@
 extern char   fileList[MAX_FILES][MAX_PATH];
 extern int    fileCount;
 
-// Scan SD card root for .mp3 files. Returns number found.
+// Scan SD card root for supported audio files. Returns number found.
 int scanSD();

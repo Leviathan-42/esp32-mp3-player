@@ -25,6 +25,11 @@ stereo I2S audio output, ANO rotary wheel navigation, and a 3D printed chassis.
 
 **Estimated Total: ~$87**
 
+- https://learn.adafruit.com/2-0-inch-320-x-240-color-ips-tft-display
+- https://learn.adafruit.com/adafruit-esp32-s3-feather
+- https://learn.adafruit.com/adafruit-i2s-stereo-decoder-uda1334a/
+- 
+
 ---
 
 ## Wiring Overview
