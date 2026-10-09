@@ -1,33 +1,30 @@
 #pragma once
 
-// NOTE: These pins are set for Wokwi simulation (ESP32-S3 DevKitC-1).
-// GPIO 35/36/37 are tied to internal flash on the DevKitC-1 and can't be used.
-// When flashing to real Adafruit Feather ESP32-S3 hardware, change:
-//   SPI_SCK  -> 36
-//   SPI_MOSI -> 35
-//   SPI_MISO -> 37
-
 // --- SPI Bus ---
-#define SPI_SCK   7
-#define SPI_MOSI  6
-#define SPI_MISO  8
+#define SPI_SCK   36   // Feather SCK
+#define SPI_MOSI  35   // Feather MO / MOSI
+#define SPI_MISO  37   // Feather MI / MISO
 
 // --- TFT Display (SPI) ---
-// Adafruit 2.0" ILI9341 #4311
-#define TFT_CS    9
-#define TFT_DC    10
-#define TFT_RST   -1   // tied to 3.3V
-#define TFT_BL    12
+// Adafruit 2.0" ST7789 #4311
+#define TFT_CS    10   // Feather D10 -> TFT CS / TCS
+#define TFT_DC    9    // Feather D9 -> TFT D/C
+#define TFT_RST   -1   // TFT RST left unconnected
+#define TFT_BL    12   // Feather D12 -> TFT BL / Lite
 
 // --- SD Card (SPI, shared bus) ---
-#define SD_CS     11
+#define SD_CS     11   // Feather D11 -> TFT SDCS
 
 // --- I2S Audio (UDA1334A DAC) ---
-#define I2S_BCLK  14
-#define I2S_LRCLK 15
-#define I2S_DOUT  16
+#define I2S_BCLK  38   // Feather RX -> UDA BCLK
+#define I2S_LRCLK 39   // Feather TX -> UDA WSEL
+#define I2S_DOUT  14   // Feather A4 -> UDA DIN
 
 // --- ANO Rotary Encoder (via breakout #5221) ---
-#define ENC_A     17   // CLK
-#define ENC_B     18   // DT
-#define ENC_BTN   21   // push button (active LOW)
+#define ENC_A     18   // Feather A0 -> ANO ENCA
+#define ENC_B     17   // Feather A1 -> ANO ENCB
+#define ENC_BTN   5    // Feather D5 -> ANO SW1
+#define ENC_SW2   6    // Feather D6 -> ANO SW2 / Down
+#define ENC_SW3   8    // Feather A5 -> ANO SW3 / Right
+#define ENC_SW4   16   // Feather A2 -> ANO SW4 / Up
+#define ENC_SW5   15   // Feather A3 -> ANO SW5 / Left

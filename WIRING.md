@@ -4,6 +4,20 @@ This is the recommended compact wiring plan for the Adafruit Feather ESP32-S3
 4MB Flash / 2MB PSRAM, Adafruit 2.0" ST7789 TFT with microSD, UDA1334A I2S DAC,
 and ANO rotary navigation encoder breakout.
 
+## Current Build Status
+
+This document is the source of truth for the real Feather wiring harness. The
+current build is wired according to this plan:
+
+- No physical power switch is installed.
+- TFT `RST` is not connected; insulate the loose reset lead if one was soldered
+  to the Feather `RST` pad.
+- The optional 100k pull-up from `D5` / `SW1` to `3V` may be installed for more
+  reliable deep-sleep wake behavior.
+- `firmware/src/pins.h` must be updated to match the "Firmware Pin Map" section
+  before flashing this wiring onto the real Feather. Some firmware pins are
+  currently still set for Wokwi simulation.
+
 ## Wire Color Legend
 
 With only six colors, some colors repeat. Label both ends of every repeated
@@ -34,13 +48,17 @@ The ANO wheel can control sleep in software. It cannot truly turn the Feather
 back on after the Feather EN pin has been pulled low, because the ESP32 is not
 running while EN is off.
 
-Recommended behavior:
+Target firmware behavior:
 
 - Long press ANO center button: firmware turns off the TFT backlight and enters
   ESP32-S3 deep sleep.
 - Press any ANO button: wake from deep sleep.
 - Optional physical kill switch: wire a latching switch to Feather `EN` and
   `GND` for true off during storage.
+
+The current physical build omits the optional kill switch. This means the
+Feather can sleep in software, but it is not fully disconnected from the
+battery during storage.
 
 Optional power switch:
 
@@ -51,6 +69,8 @@ Optional power switch:
 
 The Feather EN pin is pulled high. Connecting EN to GND turns the Feather off.
 With a simple latching switch, the "closed" switch position is off.
+
+If no physical switch is installed, leave `EN` unconnected.
 
 ## Shared Power Rails
 
@@ -125,6 +145,8 @@ Notes:
 - The display has automatic reset. Leave TFT `RST` unconnected at first.
 - If reset is unreliable, wire TFT `RST` to Feather `RST`.
 - Wire `BL` to `D12` for PWM dimming and sleep blanking.
+- If a yellow lead is already soldered to Feather `RST`, leave the far end
+  insulated unless the display needs the reset connection later.
 
 ## UDA1334A I2S DAC
 
@@ -185,6 +207,45 @@ resistor in the middle; that would make button sensing unreliable.
 
 The firmware should still enable internal pull-ups for all ANO inputs during
 normal operation.
+
+Firmware note: the current firmware reads encoder rotation and the center
+button only. `SW2` through `SW5` are wired for directional controls and future
+deep-sleep wake support, but code must be added before those buttons do
+anything in the app.
+
+## Firmware Pin Map
+
+When flashing the real Adafruit Feather ESP32-S3 build, `firmware/src/pins.h`
+should match this wiring:
+
+```cpp
+// --- SPI Bus ---
+#define SPI_SCK   36   // Feather SCK
+#define SPI_MOSI  35   // Feather MO / MOSI
+#define SPI_MISO  37   // Feather MI / MISO
+
+// --- TFT Display (SPI) ---
+#define TFT_CS    10   // Feather D10 -> TFT CS / TCS
+#define TFT_DC    9    // Feather D9  -> TFT D/C
+#define TFT_RST   -1   // TFT RST left unconnected
+#define TFT_BL    12   // Feather D12 -> TFT BL / Lite
+
+// --- SD Card (SPI, shared bus) ---
+#define SD_CS     11   // Feather D11 -> TFT SDCS
+
+// --- I2S Audio (UDA1334A DAC) ---
+#define I2S_BCLK  38   // Feather RX -> UDA BCLK
+#define I2S_LRCLK 39   // Feather TX -> UDA WSEL
+#define I2S_DOUT  14   // Feather A4 -> UDA DIN
+
+// --- ANO Rotary Encoder (via breakout #5221) ---
+#define ENC_A     18   // Feather A0 -> ANO ENCA
+#define ENC_B     17   // Feather A1 -> ANO ENCB
+#define ENC_BTN   5    // Feather D5 -> ANO SW1
+```
+
+The Wokwi simulation uses different pins because its ESP32-S3 DevKitC-1 board
+does not have the same safe pin mapping as the Feather.
 
 ## Top-Level Diagram
 
