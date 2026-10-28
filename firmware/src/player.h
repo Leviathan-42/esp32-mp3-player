@@ -2,7 +2,7 @@
 #include <Arduino.h>
 
 void initPlayer();
-void playTrack(const char* path);
+bool playTrack(const char* path);
 void stopPlayback();
 void togglePause();
 void updatePlayer();       // call every loop iteration
